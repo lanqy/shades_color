@@ -7,12 +7,12 @@ const forFn = async (item, jsonItem, jsonWrap, key) => {
   const a = item.split("\n");
   const hex = a[1].split(" ");
   const rgb = a[2].split(" ");
-  const cmyk = a[3].split(" ");
+  const cmyk = a[3].replace(/,/g, "").split(" ");
   jsonItem.push({
     name: a[0],
     hex: hex[1],
     rgb: `rgb(${rgb[1]} ${rgb[2]} ${rgb[3]})`,
-    cmyk: `cmyk(${cmyk[1]} ${cmyk[2]} ${cmyk[3]} ${cmyk[4]})`,
+    cmyk: `cmyk(${cmyk[1]}%, ${cmyk[2]}%, ${cmyk[3]}%, ${cmyk[4]}%)`,
   });
   jsonWrap[key[0]] = jsonItem;
 };
@@ -31,10 +31,11 @@ const forFn = async (item, jsonItem, jsonWrap, key) => {
     }
     jsonObj = {
       ...jsonObj,
-      ...jsonWrap
-    }
+      ...jsonWrap,
+    };
   }
   fs.writeFileSync("colors.json", JSON.stringify(jsonObj), {
     encoding: "utf8",
   });
 })();
+
